@@ -2,7 +2,7 @@ extends base
 block content
     form(method='post', action='/register')
         .input-group
-            input.form-control(type='text', placeholder='Phone number', name='number')
+            input.form-control#number(type='text', placeholder='Phone number', name='number')
             span.input-group-addon @
             select.selectpicker(name='carrier')
                 option(value='verizon') Verizon
@@ -11,5 +11,9 @@ block content
                 option(value='tmobile') T-Mobile
         br
         button.btn.btn-lg.btn-primary.btn-block#submit(name='submit' type='submit') Subscribe
+        br
+        center
+            img(src="/img/home.gif" alt="cat :)")
     script.
         $('.selectpicker').selectpicker();
+        $('#number').inputmask("(999) 999-9999");
