@@ -1,0 +1,21 @@
+html(lang='en')
+    head
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
+        meta(name='description', content='A source for facts about cats.')
+        link(type='text/css', rel='stylesheet', href='/css/bootstrap.min.css', media='screen,projection')
+        link(type='text/css', rel='stylesheet', href='/css/bootstrap-select.min.css', media='screen,projection')
+        link(href='//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css' rel='stylesheet')
+        link(type='text/css', rel='stylesheet', href='/css/theme.css', media="screen,projection")
+        title catfacts
+    body
+        script(type='text/javascript', src='https://code.jquery.com/jquery-2.1.1.min.js')
+        script(type='text/javascript', src='/js/bootstrap-select.min.js')
+        script(type='text/javascript', src='/js/bootstrap.min.js')
+        script(type='text/javascript', src='/js/index.js')
+        .heading
+            h1 catfacts 
+                i.fa.fa-envelope.fa-1
+            h3#subheading making the world a smarter place
+        div#wrap
+            block content

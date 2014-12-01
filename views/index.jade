@@ -1,0 +1,15 @@
+extends base
+block content
+    form(method='post', action='/register')
+        .input-group
+            input.form-control(type='text', placeholder='Phone number', name='number')
+            span.input-group-addon @
+            select.selectpicker(name='carrier')
+                option(value='verizon') Verizon
+                option(value='sprint') Sprint
+                option(value='att') AT&T
+                option(value='tmobile') T-Mobile
+        br
+        button.btn.btn-lg.btn-primary.btn-block#submit(name='submit' type='submit') Subscribe
+    script.
+        $('.selectpicker').selectpicker();
