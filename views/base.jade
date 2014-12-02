@@ -14,8 +14,18 @@ html(lang='en')
         script(type='text/javascript', src='/js/bootstrap-select.min.js')
         script(type='text/javascript', src='/js/bootstrap.min.js')
         script(type='text/javascript', src='/js/index.js')
-        .heading
+        nav.navbar.navbar-default(role='navigation')
+            a(href='/home/')
+                img(src='/img/cat.png', height='40px')
+            ul(class='nav nav-pills navbar-right')
+                li(role='navigation' class= (nav === 0 ? 'active' : ''))
+                    a(href='/home/') Home
+                li(role='navigation' class= (nav === 1 ? 'active' : ''))
+                    a(href='/about/') About
+                li(role='navigation' class= (nav === 2 ? 'active' : ''))
+                    a(href='/login/') Log in
+        #title
             h1 catfacts 2.0
-            h3#subheading watching the world burn, with facts about cats
+            h3#subtitle watching the world burn, with facts about cats
         div#wrap
             block content
