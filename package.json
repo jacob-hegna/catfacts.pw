@@ -6,9 +6,10 @@
   "dependencies": {
     "body-parser": "^1.9.3",
     "config": "^1.8.1",
+    "cron": "^1.0.5",
     "express": "^4.10.4",
     "jade": "^1.8.0",
-    "mongojs": "^0.17.0",
+    "mysql": "git://github.com/felixge/node-mysql",
     "nodemailer": "^1.3.0",
     "phone": "^1.0.3"
   },

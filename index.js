@@ -4,8 +4,13 @@ var express = require('express'),
     phone = require('phone'),
     nodemailer = require('nodemailer'),
     config = require('config'),
-    mongo = require('mongojs'),
-    db = mongo('catfacts', ['users']);
+    mysql = require('mysql');
+
+var connection = mysql.createConnection({
+    host     : 'localhost',
+    user     : config.get('database-user'),
+    password : config.get('database-pass')
+});
 
 app.set('views', 'views')
 app.set('view engine', 'jade')
@@ -14,9 +19,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 var extensions = {
-    verizon: '@vtext.com',
-    sprint: '@pm.sprint.com',
-    att: '@txt.att.net',
+    verizon: '@vzwpix.com',
+    sprint: '@pm.sprisnt.com',
+    att: '@mms.att.net',
     tmobile: '@tmomail.net'
 };
 
@@ -54,7 +59,11 @@ app.post('/register/?', function(req, res) {
         subject: '',
         text: 'Welcome to catfacts! Have fun learning :)'
     });
-    db.users.save({number: number, carrier: carrier});
+    
+    connection.query("INSERT INTO `catfacts`.`users` (`id`, `phone`) VALUES (NULL, " + connection.escape(number + extensions[carrier]) + ");", function(err, rows) {
+        console.log(err);
+    });
+    
     res.redirect('/success/');
 });
 

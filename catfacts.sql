@@ -1,0 +1,16 @@
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+USE catfacts;
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(2) NOT NULL AUTO_INCREMENT,
+  `phone` varchar(25) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=0 ;
+
+CREATE TABLE IF NOT EXISTS `facts` (
+  `id` int(2) NOT NULL AUTO_INCREMENT,
+  `fact` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=0 ;
