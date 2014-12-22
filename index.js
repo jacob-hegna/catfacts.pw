@@ -124,14 +124,18 @@ app.post('/login/?', function(req, res) {
     var username = req.body.username;
     var hashword = crypto.createHash('sha512').update(req.body.password).digest("hex");
     connection.query("SELECT * FROM catfacts.admins", function(err, rows) {
+        var i = 0;
         rows.forEach(function(ele, i, arr) {
             if(ele.username == username && ele.password == hashword) {
                 session.username = username;
                 res.redirect('/dashboard/');
             } else {
-                res.redirect('/login/');
+                i += 1;
             }
         });
+        if(i == rows.length) {
+            res.redirect('/login/');
+        }
     });
 });
 
