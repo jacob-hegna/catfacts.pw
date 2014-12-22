@@ -20,10 +20,10 @@ var connection = mysql.createConnection({
 var users = [],
     facts = [];
 
-connection.query("SELECT * FROM catfacts.users;", function(err, rows) {
-    users = rows;
-    connection.query("SELECT * FROM catfacts.facts;", function(err, rows) {
-        facts = rows;
+connection.query("SELECT * FROM catfacts.users;", function(uerr, urows) {
+    users = urows;
+    connection.query("SELECT * FROM catfacts.facts;", function(ferr, frows) {
+        facts = frows;
         new CronJob('0 * * * *', function(){
             users.forEach(function(value, i, array) {
                 transporter.sendMail({
@@ -36,5 +36,3 @@ connection.query("SELECT * FROM catfacts.users;", function(err, rows) {
         }, null, true);
     });
 });
-
-connection.end();
