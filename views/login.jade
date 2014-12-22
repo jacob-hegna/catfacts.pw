@@ -1,2 +1,8 @@
 extends base
 block content
+    form.form-group(method='post')
+        input#username(name='username', class='form-control', placeholder='Username', required, autofocus)
+        input#password(name='password', class='form-control', placeholder='Password', required, type='password')
+        br
+        button#submit.btn.btn-large.btn-primary(style='width:100%;', type='submit')
+            | Submit

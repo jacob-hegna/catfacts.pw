@@ -1,0 +1,46 @@
+extends base
+block content
+    ul.nav.nav-tabs#tabs(role='tablist')
+        li.active(role='presentation')
+            a(href='#users', role='tab', data-toggle='tab') Users
+        li(role='presentation')
+            a(href='#facts', role='tab', data-toggle='tab') Facts
+    #tabcontent.tab-content
+        #users.tab-pane.fade.active.in(role='tabpanel')
+            table.table.table-hover(style='margin-top: 50px; text-align: left; font-size: medium;')
+                thead
+                    th(width='20%') Unsubscribe
+                    th(width='20%') db-id
+                    th(width='60%') Number
+                tbody
+                    each i in users
+                        tr
+                            td
+                                form(method='post', action='/unsubscribe')
+                                    input.hidden(value=i.id, name='id')
+                                    button.btn.btn-sm.btn-primary(type='submit') Save me!
+                            td= i.id
+                            td= i.phone
+        #facts.tab-pane.fade.in(role='tabpanel')
+            table.table.table-hover(style='margin-top: 50px; text-align: left; font-size: medium;')
+                thead
+                    th(width='20%') Remove
+                    th(width='20%') db-id
+                    th(width='60%') Fact
+                tbody
+                    each i in facts
+                        tr
+                            td
+                                form(method='post', action='/remove-fact')
+                                    input.hidden(value=i.id, name='id')
+                                    button.btn.btn-sm.btn-primary(type='submit') Not good enough?
+                            td= i.id
+                            td= i.fact
+                    tr
+                        form(method='post', action='/new-fact')
+                            td
+                                button.btn.btn-sm.btn-primary(type='submit') New fact!
+                            td
+                                | auto-generated
+                            td
+                                input(name='fact', class='form-control', placeholder='Fact', required, autofocus)

@@ -22,21 +22,19 @@ var users = [],
 
 connection.query("SELECT * FROM catfacts.users;", function(err, rows) {
     users = rows;
-});
-connection.query("SELECT * FROM catfacts.facts;", function(err, rows) {
-    facts = rows;
+    connection.query("SELECT * FROM catfacts.facts;", function(err, rows) {
+        facts = rows;
+        new CronJob('0 * * * *', function(){
+            users.forEach(function(value, i, array) {
+                transporter.sendMail({
+                    from: config.get('email'),
+                    to: value.phone,
+                    subject: '',
+                    text: facts[Math.floor(Math.random()*facts.length)].fact
+                });
+            });
+        }, null, true);
+    });
 });
 
 connection.end();
-
-new CronJob('* * * * *', function(){
-    users.forEach(function(value, i, array) {
-        transporter.sendMail({
-            from: config.get('email'),
-            to: value.phone,
-            subject: '',
-            text: facts[Math.floor(Math.random()*facts.length)].fact
-        });
-    });
-    console.log("sent");
-}, null, true);

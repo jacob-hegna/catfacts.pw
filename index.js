@@ -1,10 +1,15 @@
 var express = require('express'),
     app = express(),
+    express_session = require('express-session'),
     bodyParser = require('body-parser'),
     phone = require('phone'),
     nodemailer = require('nodemailer'),
     config = require('config'),
-    mysql = require('mysql');
+    mysql = require('mysql'),
+    crypto = require('crypto');
+
+app.use(express_session({secret: 'idk what this is'}));
+var session = {};
 
 var connection = mysql.createConnection({
     host     : 'localhost',
@@ -20,7 +25,7 @@ app.use(bodyParser.json());
 
 var extensions = {
     verizon: '@vzwpix.com',
-    sprint: '@pm.sprisnt.com',
+    sprint: '@pm.sprint.com',
     att: '@mms.att.net',
     tmobile: '@tmomail.net'
 };
@@ -49,6 +54,55 @@ app.get('/success/?', function(req, res) {
     res.render('success', {nav: -1});
 });
 
+app.get('/dashboard/?', function(req, res) {
+    session = req.session;
+    if(session.hasOwnProperty('username')) {
+        var users = [],
+            facts = [];
+        connection.query("SELECT * FROM catfacts.users;", function(err, rows) {
+            users = rows;
+            connection.query("SELECT * FROM catfacts.facts;", function(err, rows) {
+                facts = rows;
+                    res.render('dashboard', {users: users, facts: facts});
+            });
+        });
+    } else {
+        res.render('error', {code: 403});
+    }
+})
+
+app.get('/logout/?', function(req, res) {
+    session = {};
+    res.redirect('/home/');
+})
+
+app.post('/session/?', function(req, res) {
+    if(session.hasOwnProperty('username')) {
+        res.send('1');
+    } else {
+        res.send('0');
+    }
+});
+
+app.post('/unsubscribe/?', function(req, res) {
+    if(session.hasOwnProperty('username')) {
+        connection.query('DELETE FROM catfacts.users WHERE id=' + connection.escape(req.body.id) + ';', function(err, rows) {});
+        res.redirect('/dashboard/');
+    }
+});
+
+app.post('/remove-fact/?', function(req, res) {
+    if(session.hasOwnProperty('username')) {
+        connection.query('DELETE FROM catfacts.facts WHERE id=' + connection.escape(req.body.id) + ';', function(err, rows) {});
+        res.redirect('/dashboard/');
+    }
+});
+
+app.post('/new-fact/?', function(req, res) {
+    connection.query('INSERT INTO catfacts.facts (`id`, `fact`) VALUES (NULL, ' + connection.escape(req.body.fact) + ');', function(err, rows) {});
+    res.redirect('/dashboard/');
+});
+
 app.post('/register/?', function(req, res) {
     var number = phone(req.body.number, 'USA')[0];
     var carrier = req.body.carrier;
@@ -60,11 +114,25 @@ app.post('/register/?', function(req, res) {
         text: 'Welcome to catfacts! Have fun learning :)'
     });
     
-    connection.query("INSERT INTO `catfacts`.`users` (`id`, `phone`) VALUES (NULL, " + connection.escape(number + extensions[carrier]) + ");", function(err, rows) {
-        console.log(err);
-    });
+    connection.query("INSERT INTO `catfacts`.`users` (`id`, `phone`) VALUES (NULL, " + connection.escape(number + extensions[carrier]) + ");", function(err, rows) {});
     
     res.redirect('/success/');
+});
+
+app.post('/login/?', function(req, res) {
+    session = req.session;
+    var username = req.body.username;
+    var hashword = crypto.createHash('sha512').update(req.body.password).digest("hex");
+    connection.query("SELECT * FROM catfacts.admins", function(err, rows) {
+        rows.forEach(function(ele, i, arr) {
+            if(ele.username == username && ele.password == hashword) {
+                session.username = username;
+                res.redirect('/dashboard/');
+            } else {
+                res.redirect('/login/');
+            }
+        });
+    });
 });
 
 app.get('*', function(req, res) {
